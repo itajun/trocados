@@ -2,9 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
-import DatePicker from 'material-ui/DatePicker';
+import Button from 'material-ui/Button';
 import { TextField } from 'material-ui';
 
 function actionCreatorPostName(name) {
@@ -47,7 +45,7 @@ class NewCategory extends React.Component {
             <form onSubmit={this.handleSubmit}>
                 <p>{ this.props.name == null ? "unknown" : "[" + this.props.name + "]" }</p>
                 <TextField hintText="Hint Text" name="name" onChange={this.handleFormChange} /><br />
-                <RaisedButton type="submit" label="submit" className="button-submit" primary={true} />
+                <Button variant="raised" type="submit" color="primary">Send</Button>
             </form>
         );
     }

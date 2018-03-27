@@ -1,40 +1,56 @@
 import React, { Component } from 'react';
-import { Switch, Route, Link, withRouter } from 'react-router-dom'
+import List, { ListItem } from 'material-ui/List';
+import { Switch, Route, withRouter } from 'react-router-dom'
 import AppBar from 'material-ui/AppBar';
+import Toolbar from 'material-ui/Toolbar';
+import Typography from 'material-ui/Typography';
+import Drawer from 'material-ui/Drawer';
+import Categories from './basics/categories/Categories';
 import IconButton from 'material-ui/IconButton';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import NavigationExpandMore from 'material-ui/svg-icons/navigation/expand-more';
-import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
-import NewCategory from './basics/categories/NewCategory';
+import MenuIcon from 'material-ui-icons/Menu';
 
-const Menu = withRouter((props) => (
-    <IconMenu
-        {...props}
-        iconButtonElement={
-            <IconButton><NavigationExpandMore /></IconButton>
-        }
-        targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'right', vertical: 'top' }}>
-        <MenuItem
-            primaryText="Basics"
-            rightIcon={<ArrowDropRight />}
-            menuItems={[
-                <MenuItem primaryText="Categories" onClick={() => props.history.push('/categories')} />
-            ]} />
-        <MenuItem primaryText="Sign out" containerElement={<Link to="/logout" />} />
-    </IconMenu>
-));
+const Menu = withRouter((props) => {
+    function goto(path) {
+        props.history.push(path);
+        props.handleClose();
+    };
+
+    return (<Drawer
+        open={props.open}
+        onClose={props.handleClose}
+    >
+        <List type="nav">
+            <ListItem button onClick={() => goto("/categories")}>Categories</ListItem>
+        </List>
+    </Drawer>);
+});
 
 export default class Trocados extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { menuOpen: false };
+    }
+
+    handleMenuToggle = () => this.setState({ menuOpen: !this.state.menuOpen });
+
+    handleMenuClose = () => this.setState({ menuOpen: false });
+
     render() {
         return (
             <div>
-                <AppBar
-                    title="Trocados"
-                    iconElementLeft={<Menu />} />
+                <AppBar position="static">
+                    <Toolbar>
+                        <IconButton color="inherit" aria-label="Menu" color="inherit"  onClick={this.handleMenuToggle}>
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography variant="title" color="inherit">Trocados</Typography>
+                    </Toolbar>
+                </AppBar>
+
+                <Menu handleClose={this.handleMenuClose} open={this.state.menuOpen} />
+
                 <Switch>
-                    <Route exact path="/categories" component={NewCategory} />
+                    <Route exact path="/categories" component={Categories} />
                 </Switch>
             </div>
         );
