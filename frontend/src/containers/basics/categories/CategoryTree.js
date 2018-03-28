@@ -1,6 +1,6 @@
 import React from 'react';
 import List, {
-    ListSubheader, ListItem, ListItemIcon,
+    ListSubheader, ListItem,
     ListItemSecondaryAction,
     ListItemText
 } from 'material-ui/List';
@@ -11,7 +11,7 @@ import DeleteIcon from 'material-ui-icons/Delete';
 import IconButton from 'material-ui/IconButton';
 
 const CategoryTree = (props) => {
-    const { classes, categories, title } = props;
+    const { classes, categories, title, onRemoveClick, onAddClick } = props;
 
     return (
         <List
@@ -20,7 +20,7 @@ const CategoryTree = (props) => {
             subheader={<ListSubheader component="div">
                 {title}
                 <ListItemSecondaryAction>
-                    <Button color="primary" aria-label="Add category" className={classes.topButton}>
+                    <Button color="primary" aria-label="New category" className={classes.topButton} size="small"  onClick={() => onAddClick()} >
                         New category
                         <AddIcon className={classes.topButtonIcon} />
                     </Button>
@@ -37,10 +37,10 @@ const CategoryTree = (props) => {
                     >
                         <ListItemText primary={categories[firstLevelKey].name} />
                         <ListItemSecondaryAction>
-                            <IconButton color="primary" aria-label="Add" className={classes.itemButton} >
+                            <IconButton color="primary" aria-label="Add" className={classes.itemButton} onClick={() => onAddClick(firstLevelKey)} >
                                 <AddIcon className={classes.itemButtonIcon} />
                             </IconButton>
-                            <IconButton color="secondary" aria-label="Remove" className={classes.itemButton}>
+                            <IconButton color="secondary" aria-label="Remove" className={classes.itemButton} onClick={() => onRemoveClick(firstLevelKey)}>
                                 <DeleteIcon className={classes.itemButtonIcon} />
                             </IconButton>
                         </ListItemSecondaryAction>
@@ -56,7 +56,7 @@ const CategoryTree = (props) => {
                             >
                                 <ListItemText primary={child.name} />
                                 <ListItemSecondaryAction >
-                                    <IconButton color="secondary" className={classes.itemButton} aria-label="Remove">
+                                    <IconButton color="secondary" className={classes.itemButton} aria-label="Remove" onClick={() => onRemoveClick(child.id)}>
                                         <DeleteIcon className={classes.itemButtonIcon} />
                                     </IconButton>
                                 </ListItemSecondaryAction>
@@ -73,26 +73,20 @@ const styles = theme => ({
     itemButtonIcon: {
         fontSize: "medium",
     },
-    itemButton: {
-        width: 20,
-        marginLeft: 4
-    },
-    topButton: {
-        paddingRight: 0
-    },
     topButtonIcon: {
         marginLeft: theme.spacing.unit
     },
     parentItem: {
-        paddingTop: 4,
-        paddingBottom: 2
+        paddingTop: theme.spacing.unit,
     },
     subItemContainer: {
-        paddingLeft: 4,
+        paddingLeft: theme.spacing.unit * 2,
     },
     subItem: {
         paddingTop: 0,
-        paddingBottom: 0,
+    },
+    outer: {
+        paddingBottom:  theme.spacing.unit * 2,
     }
 });
 

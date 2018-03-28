@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import Grid from 'material-ui/Grid';
-import { lazyFetchCategories } from '../../../store/basics/actions';
+import { lazyFetchCategories, lazyRemoveAndUpdateCategories, lazyAddAndUpdateCategories } from '../../../store/basics/actions';
 import { CircularProgress } from 'material-ui';
 import { allCategories, incomeTree, expenseTree } from '../../../store/basics/selectors';
 import CategoryTree from './CategoryTree';
+import EditCategory from './EditCategory';
 import Paper from 'material-ui/Paper';
-import {withStyles} from 'material-ui/styles';
+import { withStyles } from 'material-ui/styles';
 
 class Categories extends React.Component {
     componentWillMount() {
@@ -20,23 +21,43 @@ class Categories extends React.Component {
         }
     }
 
+    handleDisplayAddCategory = (type) => (parent) => {
+        this.setState({ 
+            editableCategory: {
+                parent: parent, 
+                type: type
+            }
+         });
+    }
+
+    handleCancelAddCategory = () => {
+        this.setState({ editableCategory: null });
+    }
+
+    handleConfirmAddCategory = category => {
+        this.props.lazyAddAndUpdateCategories(category)
+        this.setState({ editableCategory: null });
+    }
+
     render() {
-        if (!this.props.loaded) {
-            return <CircularProgress style={{ marginLeft: "50%", marginTop: "20%" }} />
-        }
+        const { classes, incomeTree, expenseTree, lazyRemoveAndUpdateCategories } = this.props;
 
-        const { classes, incomeTree, expenseTree } = this.props;
+        let result = <CircularProgress style={{ marginLeft: "50%", marginTop: "20%" }} />
 
-        return (
-            <Grid container className={classes.container}>
+        if (this.state.editableCategory != null) {
+            result = <EditCategory onCancel={this.handleCancelAddCategory} onConfirm={this.handleConfirmAddCategory} category={this.state.editableCategory} />
+        } else if (this.props.loaded) {
+            result = <Grid container className={classes.container}>
                 <Grid item sm={6}>
-                    <Paper><CategoryTree title="Income" categories={incomeTree} /></Paper>
+                    <Paper><CategoryTree title="Income" categories={incomeTree} onRemoveClick={lazyRemoveAndUpdateCategories} onAddClick={this.handleDisplayAddCategory("income")} /></Paper>
                 </Grid>
                 <Grid item sm={6}>
-                    <Paper><CategoryTree title="Expenses" categories={expenseTree} /></Paper>
+                    <Paper><CategoryTree title="Expenses" categories={expenseTree} onRemoveClick={lazyRemoveAndUpdateCategories} onAddClick={this.handleDisplayAddCategory("expense")} /></Paper>
                 </Grid>
             </Grid>
-        );
+        }
+
+        return result;
     }
 }
 
@@ -51,6 +72,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         lazyFetchCategories: payload => dispatch(lazyFetchCategories()),
+        lazyRemoveAndUpdateCategories: payload => dispatch(lazyRemoveAndUpdateCategories(payload)),
+        lazyAddAndUpdateCategories: payload => dispatch(lazyAddAndUpdateCategories(payload)),
     }
 };
 
