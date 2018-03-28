@@ -40,7 +40,7 @@ export default class Trocados extends Component {
             <div>
                 <AppBar position="static">
                     <Toolbar>
-                        <IconButton color="inherit" aria-label="Menu" color="inherit"  onClick={this.handleMenuToggle}>
+                        <IconButton color="inherit" aria-label="Menu" onClick={this.handleMenuToggle}>
                             <MenuIcon />
                         </IconButton>
                         <Typography variant="title" color="inherit">Trocados</Typography>
