@@ -14,6 +14,40 @@ export const fetchCategories = () => (
                     type: "income",
                     name: "income 1.1",
                     parent: 1
+                },
+                {
+                    id: 3,
+                    type: "income",
+                    name: "income 1.2",
+                    parent: 1
+                },
+                {
+                    id: 4,
+                    type: "income",
+                    name: "income 1.3",
+                    parent: 1
+                },
+                {
+                    id: 5,
+                    type: "income",
+                    name: "income 2"
+                },
+                {
+                    id: 6,
+                    type: "income",
+                    name: "income 2.1",
+                    parent: 1
+                },
+                {
+                    id: 7,
+                    type: "expense",
+                    name: "expense 1"
+                },
+                {
+                    id: 8,
+                    type: "expense",
+                    name: "expense 1.1",
+                    parent: 7
                 }
             ]
         )
