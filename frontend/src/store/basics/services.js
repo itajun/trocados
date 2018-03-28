@@ -36,7 +36,7 @@ export const fetchCategories = () => (
                     id: 6,
                     type: "income",
                     name: "income 2.1",
-                    parent: 1
+                    parent: 5
                 },
                 {
                     id: 7,
