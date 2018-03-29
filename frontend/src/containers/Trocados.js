@@ -8,6 +8,11 @@ import Drawer from 'material-ui/Drawer';
 import Categories from './basics/categories/Categories';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
+import Snackbar from 'material-ui/Snackbar';
+import { connect } from 'react-redux'
+import { allErrors } from '../store/system/selectors';
+import { setErrors } from '../store/system/actions';
+import { findErrorMessage } from '../lib/utils';
 
 const Menu = withRouter((props) => {
     function goto(path) {
@@ -25,7 +30,7 @@ const Menu = withRouter((props) => {
     </Drawer>);
 });
 
-export default class Trocados extends Component {
+class Trocados extends Component {
     constructor(props) {
         super(props);
         this.state = { menuOpen: false };
@@ -36,8 +41,24 @@ export default class Trocados extends Component {
     handleMenuClose = () => this.setState({ menuOpen: false });
 
     render() {
+        const { errors } = this.props;
+
         return (
             <div>
+                <Snackbar
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    open={errors.length > 0}
+                    onClose={this.props.clearErrors}
+                    SnackbarContentProps={{
+                        'aria-describedby': 'message-id',
+                    }}
+                    message={(
+                        <ul id="message-id">
+                            {errors.map(e => <li key={e.id}>{findErrorMessage(e.response)}</li>)}
+                        </ul>
+                    )}
+                />
+
                 <AppBar position="static">
                     <Toolbar>
                         <IconButton color="inherit" aria-label="Menu" onClick={this.handleMenuToggle}>
@@ -56,3 +77,20 @@ export default class Trocados extends Component {
         );
     }
 };
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        errors: allErrors(state)
+    };
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        clearErrors: () => dispatch(setErrors([]))
+    }
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Trocados)

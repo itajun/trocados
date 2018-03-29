@@ -13,7 +13,7 @@ export const incomeTree = (state) => {
     if (all == null) {
         return all;
     }
-    return categoryTree(all.filter(item => item.type === "income"));
+    return categoryTree(all.filter(item => item.type === "INCOME"));
 };
 
 export const expenseTree = (state) => {
@@ -21,7 +21,7 @@ export const expenseTree = (state) => {
     if (all == null) {
         return all;
     }
-    return categoryTree(all.filter(item => item.type === "expense"));
+    return categoryTree(all.filter(item => item.type === "EXPENSE"));
 };
 
 function categoryTree(categories) {

@@ -11,7 +11,7 @@ import DeleteIcon from 'material-ui-icons/Delete';
 import IconButton from 'material-ui/IconButton';
 
 const CategoryTree = (props) => {
-    const { classes, categories, title, onRemoveClick, onAddClick } = props;
+    const { classes, categories, title, onRemoveClick, onAddClick, onEditClick } = props;
 
     return (
         <List
@@ -32,6 +32,7 @@ const CategoryTree = (props) => {
                     <ListItem
                         role={undefined}
                         className={classes.parentItem}
+                        onClick={() => onEditClick(categories[firstLevelKey])}
                         button
                         dense
                     >
@@ -51,6 +52,7 @@ const CategoryTree = (props) => {
                                 key={child.id}
                                 role={undefined}
                                 className={classes.subItem}
+                                onClick={() => onEditClick(child)}
                                 button
                                 dense
                             >

@@ -7,6 +7,7 @@ import Dialog, {
     DialogContentText,
     DialogTitle,
 } from 'material-ui/Dialog';
+import {selectText} from '../../../lib/utils'
 
 class EditCategory extends React.Component {
     constructor(props) {
@@ -46,7 +47,9 @@ class EditCategory extends React.Component {
                         label="Name"
                         type="text"
                         name="name"
+                        defaultValue={this.state.category.name}
                         onChange={this.handleFormChange}
+                        onFocus={selectText}
                         fullWidth
                     />
                 </DialogContent>
