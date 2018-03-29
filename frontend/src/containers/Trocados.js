@@ -13,6 +13,7 @@ import { connect } from 'react-redux'
 import { allErrors } from '../store/system/selectors';
 import { setErrors } from '../store/system/actions';
 import { findErrorMessage } from '../lib/utils';
+import { withStyles } from 'material-ui';
 
 const Menu = withRouter((props) => {
     function goto(path) {
@@ -41,7 +42,7 @@ class Trocados extends Component {
     handleMenuClose = () => this.setState({ menuOpen: false });
 
     render() {
-        const { errors } = this.props;
+        const { classes, errors } = this.props;
 
         return (
             <div>
@@ -53,8 +54,8 @@ class Trocados extends Component {
                         'aria-describedby': 'message-id',
                     }}
                     message={(
-                        <ul id="message-id">
-                            {errors.map(e => <li key={e.id}>{findErrorMessage(e.response)}</li>)}
+                        <ul id="message-id" className={classes.snackbar}>
+                            {errors.map(e => <li key={e.id} className={classes.errorMessage}>{findErrorMessage(e.response)}</li>)}
                         </ul>
                     )}
                 />
@@ -90,7 +91,17 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     }
 };
 
-export default connect(
+const styles = theme => ({
+    snackbar: {
+        marginTop: 0,
+        marginBottom: 0
+    },
+    errorMessage: {
+        listStyleType: "none"
+    }
+});
+
+export default withStyles(styles)(connect(
     mapStateToProps,
     mapDispatchToProps
-)(Trocados)
+)(Trocados))

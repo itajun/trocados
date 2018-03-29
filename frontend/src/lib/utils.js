@@ -2,9 +2,11 @@ export const selectText = event => {
     event.target.setSelectionRange(0, event.target.value.length)
 }
 
-export const findErrorMessage = response => {
+export const findErrorMessage = error => {
+    let response = error.response;
+
     if (response == null) {
-        return "";
+        return error.message;
     }
 
     if (typeof response === "string") {

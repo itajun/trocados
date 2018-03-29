@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import Grid from 'material-ui/Grid';
-import { lazyFetchCategories, lazyRemoveAndUpdateCategories, lazyAddAndUpdateCategories, lazyUpdateAndUpdateCategories } from '../../../store/basics/actions';
+import { asyncFetchCategories, asyncRemoveCategory, asyncAddCategory, asyncUpdateCategory } from '../../../store/basics/actions';
 import { CircularProgress } from 'material-ui';
 import { allCategories, incomeTree, expenseTree } from '../../../store/basics/selectors';
 import CategoryTree from './CategoryTree';
@@ -16,12 +16,12 @@ class Categories extends React.Component {
 
     componentDidMount() {
         if (!this.state.loaded) {
-            this.props.lazyFetchCategories();
+            this.props.asyncFetchCategories();
             this.setState({ loaded: true });
         }
     }
 
-    handleDisplayAddCategory = (type) => (parent) => {
+    handleAddCategory = (type) => (parent) => {
         this.setState({ 
             editableCategory: {
                 parent: parent, 
@@ -30,33 +30,33 @@ class Categories extends React.Component {
          });
     }
 
-    handleDisplayEditCategory = (category) => {
+    handleEditCategory = (category) => {
         this.setState({ editableCategory: category });
     }
 
-    handleCancelEditCategory = () => {
+    handleCancelPopup = () => {
         this.setState({ editableCategory: null });
     }
 
-    handleConfirmAddCategory = category => {
-        this.props.lazyAddAndUpdateCategories(category)
+    handleConfirmPopup = category => {
+        this.props.asyncAddCategory(category)
         this.setState({ editableCategory: null });
     }
 
     render() {
-        const { classes, incomeTree, expenseTree, lazyRemoveAndUpdateCategories } = this.props;
+        const { classes, incomeTree, expenseTree, asyncRemoveCategory } = this.props;
 
         let result = <CircularProgress style={{ marginLeft: "50%", marginTop: "20%" }} />
 
         if (this.state.editableCategory != null) {
-            result = <EditCategory onCancel={this.handleCancelEditCategory} onConfirm={this.handleConfirmAddCategory} category={this.state.editableCategory} />
+            result = <EditCategory onCancel={this.handleCancelPopup} onConfirm={this.handleConfirmPopup} category={this.state.editableCategory} />
         } else if (this.props.loaded) {
             result = <Grid container className={classes.container}>
                 <Grid item sm={6}>
-                    <Paper><CategoryTree title="Income" categories={incomeTree} onRemoveClick={lazyRemoveAndUpdateCategories} onAddClick={this.handleDisplayAddCategory("INCOME")} onEditClick={this.handleDisplayEditCategory} /></Paper>
+                    <Paper><CategoryTree title="Income" categories={incomeTree} onRemoveClick={asyncRemoveCategory} onAddClick={this.handleAddCategory("INCOME")} onEditClick={this.handleEditCategory} /></Paper>
                 </Grid>
                 <Grid item sm={6}>
-                    <Paper><CategoryTree title="Expenses" categories={expenseTree} onRemoveClick={lazyRemoveAndUpdateCategories} onAddClick={this.handleDisplayAddCategory("EXPENSE")} onEditClick={this.handleDisplayEditCategory} /></Paper>
+                    <Paper><CategoryTree title="Expenses" categories={expenseTree} onRemoveClick={asyncRemoveCategory} onAddClick={this.handleAddCategory("EXPENSE")} onEditClick={this.handleEditCategory} /></Paper>
                 </Grid>
             </Grid>
         }
@@ -75,10 +75,10 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        lazyFetchCategories: payload => dispatch(lazyFetchCategories()),
-        lazyRemoveAndUpdateCategories: payload => dispatch(lazyRemoveAndUpdateCategories(payload)),
-        lazyAddAndUpdateCategories: payload => dispatch(lazyAddAndUpdateCategories(payload)),
-        lazyUpdateAndUpdateCategories: payload => dispatch(lazyUpdateAndUpdateCategories(payload)),
+        asyncFetchCategories: payload => dispatch(asyncFetchCategories()),
+        asyncRemoveCategory: payload => dispatch(asyncRemoveCategory(payload)),
+        asyncAddCategory: payload => dispatch(asyncAddCategory(payload)),
+        asyncUpdateCategory: payload => dispatch(asyncUpdateCategory(payload)),
     }
 };
 

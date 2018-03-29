@@ -8,42 +8,42 @@ export const setCategories = (payload = []) => (
         payload
     });
 
-export const lazyFetchCategories = () => (dispatch) => {
+export const asyncFetchCategories = () => (dispatch) => {
     fetchCategories()
         .then(categories => {
             dispatch(setCategories(categories))
         })
         .catch(error => {
-            dispatch(addError({ response: error.response }))
+            dispatch(addError({ response: error }))
         })
 };
 
-export const lazyRemoveAndUpdateCategories = (id) => (dispatch) => {
+export const asyncRemoveCategory = (id) => (dispatch) => {
     removeCategory(id)
         .then(() => {
-            lazyFetchCategories()(dispatch)
+            asyncFetchCategories()(dispatch)
         })
         .catch(error => {
-            dispatch(addError({ response: error.response }))
+            dispatch(addError({ response: error }))
         })
 };
 
-export const lazyAddAndUpdateCategories = (category) => (dispatch) => {
+export const asyncAddCategory = (category) => (dispatch) => {
     addCategory(category)
         .then(() => {
-            lazyFetchCategories()(dispatch)
+            asyncFetchCategories()(dispatch)
         })
         .catch(error => {
-            dispatch(addError({ response: error.response }))
+            dispatch(addError({ response: error }))
         })
 };
 
-export const lazyUpdateAndUpdateCategories = (category) => (dispatch) => {
+export const asyncUpdateCategory = (category) => (dispatch) => {
     updateCategory(category)
         .then(() => {
-            lazyFetchCategories()(dispatch)
+            asyncFetchCategories()(dispatch)
         })
         .catch(error => {
-            dispatch(addError({ response: error.response }))
+            dispatch(addError({ response: error }))
         })
 };
