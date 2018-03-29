@@ -1,0 +1,1 @@
+export const allErrors = (state) => (state.errors.all);
