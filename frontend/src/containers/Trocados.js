@@ -101,7 +101,7 @@ const styles = theme => ({
     }
 });
 
-export default withStyles(styles)(connect(
+export default withRouter(withStyles(styles)(connect(
     mapStateToProps,
     mapDispatchToProps
-)(Trocados))
+)(Trocados)))
